@@ -110,7 +110,7 @@ def ethno_race(ethn, racee):
 
 
 
-
+################################################################################################################################
 
 st.markdown(
     """<a href="https://www.viomepro.com/">
@@ -120,12 +120,16 @@ st.markdown(
     ),
     unsafe_allow_html=True,
 )
+################################################################################################################################
 
 
+################################################################################################################################
 st.text("")
 st.text("")
+################################################################################################################################
 
 
+################################################################################################################################
 st.title("Understanding and managing your personal risk factors for oral and throat cancer (Version 2: Based on Lee et al.)")
 
 
@@ -141,9 +145,10 @@ For more information about the test, please visit [viomepro.com](https://www.vio
 st.markdown(multi)
 
 st.markdown("""<hr style="border-top: dotted 3px;height:2px;border:dashed;color:black;background-color:black;" /> """, unsafe_allow_html=True)
+################################################################################################################################
 
 
-
+################################################################################################################################
 st.markdown("""
 <style>
 .big-font {
@@ -154,7 +159,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.markdown('<p class="big-font">Please complete the assessment below <br /> <FONT COLOR=SlateBlue> Click the “?” icon for more information on each question </p>', unsafe_allow_html=True)
-
+################################################################################################################################
 
 
 #################### Inputs ####################################################################################################
@@ -531,94 +536,100 @@ if(st.button(button_label, on_click=set_stage, args=(1,))):
         st.session_state.ethnicity_race = ethnicity_race
 
 
-        
+        if (st.session_state.cigarette_freq == 'never' and st.session_state.cigarette_duration != 'never') or \
+            (st.session_state.cigarette_freq != 'never' and st.session_state.cigarette_duration == 'never'):
+            mssg1 = f'In the question :blue[{cigarette_freq_label}], you answered :blue[**{st.session_state.cigarette_freq}**]'
+            mssg2 = f'In the question :blue[{cigarette_duration_label}], you answered :blue[**{st.session_state.cigarette_duration}**]'
+            mssg3 = 'Please fix the contradiction to proceed!'
+            st.write(f'{mssg1}')
+            st.write(f'{mssg2}')
+            st.write(f'{mssg3}')
+        else:
 
-        
+            df_risks = absolute_risk_lee(df_lee = st.session_state.df_lee, 
+                                        time_duration_years = st.session_state.years_of_risk,
+                                        sex = st.session_state.sex,
+                                        alcohol_drinking = st.session_state.alcohol_status,
+                                        lifetime_ave_of_cigarette_smoking_freq = st.session_state.cigarette_freq,
+                                        lifetime_cigarette_smoking_duration = st.session_state.cigarette_duration,
+                                        education = st.session_state.education_level,
+                                        race = st.session_state.ethnicity_race,
+                                        family_history_of_head_and_neck_cancer = st.session_state.hnc_family_history,
+                                        current_age = st.session_state.age)
 
-        df_risks = absolute_risk_lee(df_lee = st.session_state.df_lee, 
-                                     time_duration_years = st.session_state.years_of_risk,
-                                     sex = st.session_state.sex,
-                                     alcohol_drinking = st.session_state.alcohol_status,
-                                     lifetime_ave_of_cigarette_smoking_freq = st.session_state.cigarette_freq,
-                                     lifetime_cigarette_smoking_duration = st.session_state.cigarette_duration,
-                                     education = st.session_state.education_level,
-                                     race = st.session_state.ethnicity_race,
-                                     family_history_of_head_and_neck_cancer = st.session_state.hnc_family_history,
-                                     current_age = st.session_state.age)
-
-        
-
-
-        st.session_state.df_risks = df_risks
-
-
-        risk_OCC_text = f''' 
-        :red[1 out of {st.session_state.df_risks.loc['Oral Cavity Cancer','1_out_of_X']}] people with the same risk factor profile as yours would be diagnosed with :red[Oral Cavity Cancer] within {st.session_state.years_of_risk} years.
-        '''
-        st.session_state.risk_OCC_text = risk_OCC_text
-
-        risk_OPC_text = f''' 
-        :red[1 out of {st.session_state.df_risks.loc['Oropharyngeal Cancer','1_out_of_X']}] people with the same risk factor profile as yours would be diagnosed with :red[Oropharyngeal Cancer] within {st.session_state.years_of_risk} years.
-        '''
-        st.session_state.risk_OPC_text = risk_OPC_text
-
-        risk_HPC_text = f''' 
-        :red[1 out of {st.session_state.df_risks.loc['Hypopharyngeal Cancer','1_out_of_X']}] people with the same risk factor profile as yours would be diagnosed with :red[Hypopharyngeal Cancer] within {st.session_state.years_of_risk} years.
-        '''
-        st.session_state.risk_HPC_text = risk_HPC_text
-
-        risk_Laryngeal_text = f''' 
-        :red[1 out of {st.session_state.df_risks.loc['Laryngeal Cancer','1_out_of_X']}] people with the same risk factor profile as yours would be diagnosed with :red[Laryngeal Cancer] within {st.session_state.years_of_risk} years.
-        '''
-        st.session_state.risk_Laryngeal_text = risk_Laryngeal_text
-
-        risk_OCCandOPC_text = f''' 
-        :red[1 out of {st.session_state.df_risks.loc['OCC and OPC','1_out_of_X']}] people with the same risk factor profile as yours would be diagnosed with :red[Oral Cavity and Oropharyngeal Cancers] within {st.session_state.years_of_risk} years.
-        '''
-        st.session_state.risk_OCCandOPC_text = risk_OCCandOPC_text
-
-        risk_HNC_text = f''' 
-        :red[1 out of {st.session_state.df_risks.loc['Head and Neck Cancer','1_out_of_X']}] people with the same risk factor profile as yours would be diagnosed with :red[Head and Neck Cancer] within {st.session_state.years_of_risk} years.
-        '''
-        st.session_state.risk_HNC_text = risk_HNC_text
+            
 
 
-        # risk_OCC_text = f''' 
-        # 1. Your quantitative risk for :red[Oral Cavity Cancer] is :blue[1 out of {st.session_state.df_risks.loc['Oral Cavity Cancer','1_out_of_X']} people].
-        # '''
-        # st.session_state.risk_OCC_text = risk_OCC_text
+            st.session_state.df_risks = df_risks
 
-        # risk_OPC_text = f''' 
-        # 2. Your quantitative risk for :red[Oropharyngeal Cancer] is :blue[1 out of {st.session_state.df_risks.loc['Oropharyngeal Cancer','1_out_of_X']} people].
-        # '''
-        # st.session_state.risk_OPC_text = risk_OPC_text
 
-        # risk_HPC_text = f''' 
-        # 3. Your quantitative risk for :red[Hypopharyngeal Cancer] is :blue[1 out of {st.session_state.df_risks.loc['Hypopharyngeal Cancer','1_out_of_X']} people].
-        # '''
-        # st.session_state.risk_HPC_text = risk_HPC_text
+            risk_OCC_text = f''' 
+            :red[1 out of {st.session_state.df_risks.loc['Oral Cavity Cancer','1_out_of_X']}] people with the same risk factor profile as yours would be diagnosed with :red[Oral Cavity Cancer] within {st.session_state.years_of_risk} years.
+            '''
+            st.session_state.risk_OCC_text = risk_OCC_text
 
-        # risk_Laryngeal_text = f''' 
-        # 4. Your quantitative risk for :red[Laryngeal Cancer] is :blue[1 out of {st.session_state.df_risks.loc['Laryngeal Cancer','1_out_of_X']} people].
-        # '''
-        # st.session_state.risk_Laryngeal_text = risk_Laryngeal_text
+            risk_OPC_text = f''' 
+            :red[1 out of {st.session_state.df_risks.loc['Oropharyngeal Cancer','1_out_of_X']}] people with the same risk factor profile as yours would be diagnosed with :red[Oropharyngeal Cancer] within {st.session_state.years_of_risk} years.
+            '''
+            st.session_state.risk_OPC_text = risk_OPC_text
 
-        # risk_OCCandOPC_text = f''' 
-        # 5. Your quantitative risk for :red[Oral Cavity and Oropharyngeal Cancers] is :blue[1 out of {st.session_state.df_risks.loc['OCC and OPC','1_out_of_X']} people].
-        # '''
-        # st.session_state.risk_OCCandOPC_text = risk_OCCandOPC_text
+            risk_HPC_text = f''' 
+            :red[1 out of {st.session_state.df_risks.loc['Hypopharyngeal Cancer','1_out_of_X']}] people with the same risk factor profile as yours would be diagnosed with :red[Hypopharyngeal Cancer] within {st.session_state.years_of_risk} years.
+            '''
+            st.session_state.risk_HPC_text = risk_HPC_text
 
-        # risk_HNC_text = f''' 
-        # 6. Your quantitative risk for :red[Head and Neck Cancer] is :blue[1 out of {st.session_state.df_risks.loc['Head and Neck Cancer','1_out_of_X']} people].
-        # '''
-        # st.session_state.risk_HNC_text = risk_HNC_text
+            risk_Laryngeal_text = f''' 
+            :red[1 out of {st.session_state.df_risks.loc['Laryngeal Cancer','1_out_of_X']}] people with the same risk factor profile as yours would be diagnosed with :red[Laryngeal Cancer] within {st.session_state.years_of_risk} years.
+            '''
+            st.session_state.risk_Laryngeal_text = risk_Laryngeal_text
 
-        st.subheader(f'{st.session_state.risk_OCC_text}')
-        st.subheader(f'{st.session_state.risk_OPC_text}')
-        st.subheader(f'{st.session_state.risk_HPC_text}')
-        st.subheader(f'{st.session_state.risk_Laryngeal_text}')
-        st.subheader(f'{st.session_state.risk_OCCandOPC_text}')
-        st.subheader(f'{st.session_state.risk_HNC_text}')
+            risk_OCCandOPC_text = f''' 
+            :red[1 out of {st.session_state.df_risks.loc['OCC and OPC','1_out_of_X']}] people with the same risk factor profile as yours would be diagnosed with :red[Oral Cavity and Oropharyngeal Cancers] within {st.session_state.years_of_risk} years.
+            '''
+            st.session_state.risk_OCCandOPC_text = risk_OCCandOPC_text
+
+            risk_HNC_text = f''' 
+            :red[1 out of {st.session_state.df_risks.loc['Head and Neck Cancer','1_out_of_X']}] people with the same risk factor profile as yours would be diagnosed with :red[Head and Neck Cancer] within {st.session_state.years_of_risk} years.
+            '''
+            st.session_state.risk_HNC_text = risk_HNC_text
+
+
+            # risk_OCC_text = f''' 
+            # 1. Your quantitative risk for :red[Oral Cavity Cancer] is :blue[1 out of {st.session_state.df_risks.loc['Oral Cavity Cancer','1_out_of_X']} people].
+            # '''
+            # st.session_state.risk_OCC_text = risk_OCC_text
+
+            # risk_OPC_text = f''' 
+            # 2. Your quantitative risk for :red[Oropharyngeal Cancer] is :blue[1 out of {st.session_state.df_risks.loc['Oropharyngeal Cancer','1_out_of_X']} people].
+            # '''
+            # st.session_state.risk_OPC_text = risk_OPC_text
+
+            # risk_HPC_text = f''' 
+            # 3. Your quantitative risk for :red[Hypopharyngeal Cancer] is :blue[1 out of {st.session_state.df_risks.loc['Hypopharyngeal Cancer','1_out_of_X']} people].
+            # '''
+            # st.session_state.risk_HPC_text = risk_HPC_text
+
+            # risk_Laryngeal_text = f''' 
+            # 4. Your quantitative risk for :red[Laryngeal Cancer] is :blue[1 out of {st.session_state.df_risks.loc['Laryngeal Cancer','1_out_of_X']} people].
+            # '''
+            # st.session_state.risk_Laryngeal_text = risk_Laryngeal_text
+
+            # risk_OCCandOPC_text = f''' 
+            # 5. Your quantitative risk for :red[Oral Cavity and Oropharyngeal Cancers] is :blue[1 out of {st.session_state.df_risks.loc['OCC and OPC','1_out_of_X']} people].
+            # '''
+            # st.session_state.risk_OCCandOPC_text = risk_OCCandOPC_text
+
+            # risk_HNC_text = f''' 
+            # 6. Your quantitative risk for :red[Head and Neck Cancer] is :blue[1 out of {st.session_state.df_risks.loc['Head and Neck Cancer','1_out_of_X']} people].
+            # '''
+            # st.session_state.risk_HNC_text = risk_HNC_text
+
+            st.subheader(f'{st.session_state.risk_OCC_text}')
+            st.subheader(f'{st.session_state.risk_OPC_text}')
+            st.subheader(f'{st.session_state.risk_HPC_text}')
+            st.subheader(f'{st.session_state.risk_Laryngeal_text}')
+            st.subheader(f'{st.session_state.risk_OCCandOPC_text}')
+            st.subheader(f'{st.session_state.risk_HNC_text}')
 
 
         ###st.subheader(':blue[Once you obtain the CancerDetect saliva test, we can provide you with a more accurate personal risk assessment.]')
