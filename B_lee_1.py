@@ -1,4 +1,8 @@
 
+##### Some ques are only shown if required
+
+
+
 ## https://blog.devgenius.io/creating-an-interactive-website-with-streamlit-in-python-95-100-days-of-python-6de2868f916c
 
 import streamlit as st
@@ -95,7 +99,7 @@ if "stage" not in st.session_state:
     st.session_state.stage = 0
 
 def ethno_race(ethn, racee):
-    if ethn == 'Not Hispanic or Latino' and racee == 'White':
+    if ethn == 'No' and racee == 'White':
         out = 'non-Hispanic White'
     else:
         out = 'other'
@@ -226,15 +230,28 @@ sex = dico_sex[sex]
 
 
 
+# level_two_options = {
+#     "Cars" : ["Honda", "Opel", "Tesla"],
+#     "Food" : ["Egg", "Pizza", "Spinach"],
+#     "Electronics" : ["Headphones", "Laptop", "Phone"]
+# }
+
+# #first_choice = "Cars"
+# first_choice = st.selectbox("First level options", ["Cars", "Food", "Electronics"])
+# second_choice = st.selectbox("Second level options", level_two_options[first_choice])
+
+# st.write("You chose: ", second_choice)
+
+
 #################### Ethnicity and race #######################################################################################################
 ################################################################################################################################
-ethnicity_label = "**What ethnic group describes you?**" 
+ethnicity_label = "**Are you Hispanic or Latino?**" 
 ethnicity_tooltip = ''' TBD
 '''
 ethnicity = st.selectbox(label=ethnicity_label,
                                options = ['-- Select an option --',
-                                          'Hispanic or Latino', 
-                                          'Not Hispanic or Latino'
+                                          'Yes', 
+                                          'No'
                                          ],
                                help=ethnicity_tooltip
                                )
@@ -250,30 +267,35 @@ st.markdown(
 """, unsafe_allow_html=True)
 
 #########################################################################
-race_label = "**What racial group describes you?**" 
-race_tooltip = ''' TBD
-'''
-race = st.selectbox(label=race_label,
-                    options = ['-- Select an option --',
-                                'White', 
-                                'Black or African American',
-                                'Asian',
-                                'Native Hawaiian or Other Pacific Islander',
-                                'American Indian or Alaska Native',
-                                'Other'
-                                ],
-                    help=race_tooltip
-                               )
-st.markdown(
-"""
-<style>
-    div[class*="stSelectbox"] > label > div[data-testid="stMarkdownContainer"] > p {font-size: 18px;}
-    #bui9__anchor > svg{
-            width: 32px;
-            height: 32px;
-        }
-</style>
-""", unsafe_allow_html=True)
+
+if ethnicity == 'No':
+
+    race_label = "**What racial group describes you?**" 
+    race_tooltip = ''' TBD
+    '''
+    race = st.selectbox(label=race_label,
+                        options = ['-- Select an option --',
+                                    'White', 
+                                    'Black or African American',
+                                    'Asian',
+                                    'Native Hawaiian or Other Pacific Islander',
+                                    'American Indian or Alaska Native',
+                                    'Other'
+                                    ],
+                        help=race_tooltip
+                                )
+    st.markdown(
+    """
+    <style>
+        div[class*="stSelectbox"] > label > div[data-testid="stMarkdownContainer"] > p {font-size: 18px;}
+        #bui9__anchor > svg{
+                width: 32px;
+                height: 32px;
+            }
+    </style>
+    """, unsafe_allow_html=True)
+else:
+    race = 'Not applicable'
 ################################################################################################################################
 
 #################### Education #######################################################################################################
@@ -354,39 +376,7 @@ alcohol_status = dico_alcohol[alcohol_status]
 
 #################### cigarette freq and duration ###############################################################################
 ################################################################################################################################
-cigarette_freq_label = '''**How many cigarettes do you smoke per day?**'''
-tooltip_cigarette_freq = '''TBD
-'''
-cigarette_freq_raw = st.selectbox(label = cigarette_freq_label, 
-                              options = [
-                                         '-- Select an option --',
-                                         'Never',
-                                         '20 or less cigarettes per day',
-                                         'More than 20 cigarettes per day'
-                                        ],
-                              help=tooltip_cigarette_freq
-                                    )
-st.markdown(
-"""
-<style>
-    div[class*="stSelectbox"] > label > div[data-testid="stMarkdownContainer"] > p {font-size: 18px;}
-    #bui6__anchor > svg{
-           width: 32px;
-            height: 32px;
-        }
-</style>
-""", unsafe_allow_html=True)
 
-dico_cigarette_freq = {
-                       '-- Select an option --': '-- Select an option --',
-                       'Never': 'never',
-                    '20 or less cigarettes per day': '<=20 cigarettes/day',
-                    'More than 20 cigarettes per day': '>20 cigarettes/day'
-                    }
-
-cigarette_freq = dico_cigarette_freq[cigarette_freq_raw]
-
-###################################################################################
 ###################################################################################
 cigarette_duration_label = '''**How long have you been smoking cigarette?**'''
 
@@ -420,6 +410,44 @@ dico_cigarette_duration = {
                     }
 
 cigarette_duration = dico_cigarette_duration[cigarette_duration_raw]
+
+###################################################################################
+
+if cigarette_duration in ['<=20 years', '>20 years']:
+    cigarette_freq_label = '''**How many cigarettes do you smoke per day?**'''
+    tooltip_cigarette_freq = '''TBD
+    '''
+    cigarette_freq_raw = st.selectbox(label = cigarette_freq_label, 
+                                options = [
+                                            '-- Select an option --',
+                                            '20 or less cigarettes per day',
+                                            'More than 20 cigarettes per day'
+                                            ],
+                                help=tooltip_cigarette_freq
+                                        )
+    st.markdown(
+    """
+    <style>
+        div[class*="stSelectbox"] > label > div[data-testid="stMarkdownContainer"] > p {font-size: 18px;}
+        #bui6__anchor > svg{
+            width: 32px;
+                height: 32px;
+            }
+    </style>
+    """, unsafe_allow_html=True)
+
+    dico_cigarette_freq = {
+                        '-- Select an option --': '-- Select an option --',
+                        '20 or less cigarettes per day': '<=20 cigarettes/day',
+                        'More than 20 cigarettes per day': '>20 cigarettes/day'
+                        }
+
+    cigarette_freq = dico_cigarette_freq[cigarette_freq_raw]
+elif cigarette_duration == 'never':
+    cigarette_freq = 'never'
+else: ### i.e. '-- Select an option --'
+    cigarette_freq = 'Not applicable'
+
 ################################################################################################################################
 
 
@@ -510,25 +538,21 @@ if(st.button(button_label, on_click=set_stage, args=(1,))):
     st.session_state.sex = sex
     st.session_state.years_of_risk = years_of_risk
     st.session_state.alcohol_status = alcohol_status
-    st.session_state.cigarette_freq = cigarette_freq
     st.session_state.cigarette_duration = cigarette_duration
+    st.session_state.cigarette_freq = cigarette_freq
     st.session_state.education_level = education_level
     st.session_state.ethnicity = ethnicity
     st.session_state.race = race
     st.session_state.hnc_family_history = hnc_family_history
     st.session_state.age = age
 
-    st.session_state.cigarette_freq_raw = cigarette_freq_raw
-    st.session_state.cigarette_duration_raw = cigarette_duration_raw
 
-    
 
 
     if st.session_state.years_of_risk != '-- Select an option --' and st.session_state.alcohol_status != '-- Select an option --' \
-          and st.session_state.cigarette_freq != '-- Select an option --' and st.session_state.cigarette_duration != '-- Select an option --' \
+          and st.session_state.cigarette_duration != '-- Select an option --' and st.session_state.cigarette_freq != '-- Select an option --' \
             and st.session_state.education_level != '-- Select an option --' and st.session_state.ethnicity != '-- Select an option --' \
                 and st.session_state.race != '-- Select an option --' and st.session_state.hnc_family_history != '-- Select an option --':
-
 
         
         years_of_risk = int(float(st.session_state.years_of_risk))
@@ -537,103 +561,86 @@ if(st.button(button_label, on_click=set_stage, args=(1,))):
         ethnicity_race = ethno_race(st.session_state.ethnicity, st.session_state.race)
         st.session_state.ethnicity_race = ethnicity_race
 
+        df_risks = absolute_risk_lee(df_lee = st.session_state.df_lee, 
+                                    time_duration_years = st.session_state.years_of_risk,
+                                    sex = st.session_state.sex,
+                                    alcohol_drinking = st.session_state.alcohol_status,
+                                    lifetime_ave_of_cigarette_smoking_freq = st.session_state.cigarette_freq,
+                                    lifetime_cigarette_smoking_duration = st.session_state.cigarette_duration,
+                                    education = st.session_state.education_level,
+                                    race = st.session_state.ethnicity_race,
+                                    family_history_of_head_and_neck_cancer = st.session_state.hnc_family_history,
+                                    current_age = st.session_state.age)
 
-        if (st.session_state.cigarette_freq == 'never' and st.session_state.cigarette_duration != 'never') or \
-            (st.session_state.cigarette_freq != 'never' and st.session_state.cigarette_duration == 'never'):
+        st.session_state.df_risks = df_risks
 
-            mssg1 = f'In the question :blue[{cigarette_freq_label}], you answered :blue[**{st.session_state.cigarette_freq_raw}**]'
-            mssg2 = f'In the question :blue[{cigarette_duration_label}], you answered :blue[**{st.session_state.cigarette_duration_raw}**]'
-            mssg3 = 'Please fix the contradiction to proceed!'
-            st.write(f'{mssg1}')
-            st.write(f'{mssg2}')
-            st.write(f'{mssg3}')
-        else:
+        risk_OCC_text = f''' 
+        :red[1 out of {st.session_state.df_risks.loc['Oral Cavity Cancer','1_out_of_X']}] people with the same risk factor profile as yours would be diagnosed with :red[Oral Cavity Cancer] within {st.session_state.years_of_risk} years.
+        '''
+        st.session_state.risk_OCC_text = risk_OCC_text
 
-            df_risks = absolute_risk_lee(df_lee = st.session_state.df_lee, 
-                                        time_duration_years = st.session_state.years_of_risk,
-                                        sex = st.session_state.sex,
-                                        alcohol_drinking = st.session_state.alcohol_status,
-                                        lifetime_ave_of_cigarette_smoking_freq = st.session_state.cigarette_freq,
-                                        lifetime_cigarette_smoking_duration = st.session_state.cigarette_duration,
-                                        education = st.session_state.education_level,
-                                        race = st.session_state.ethnicity_race,
-                                        family_history_of_head_and_neck_cancer = st.session_state.hnc_family_history,
-                                        current_age = st.session_state.age)
+        risk_OPC_text = f''' 
+        :red[1 out of {st.session_state.df_risks.loc['Oropharyngeal Cancer','1_out_of_X']}] people with the same risk factor profile as yours would be diagnosed with :red[Oropharyngeal Cancer] within {st.session_state.years_of_risk} years.
+        '''
+        st.session_state.risk_OPC_text = risk_OPC_text
 
-            
+        risk_HPC_text = f''' 
+        :red[1 out of {st.session_state.df_risks.loc['Hypopharyngeal Cancer','1_out_of_X']}] people with the same risk factor profile as yours would be diagnosed with :red[Hypopharyngeal Cancer] within {st.session_state.years_of_risk} years.
+        '''
+        st.session_state.risk_HPC_text = risk_HPC_text
 
+        risk_Laryngeal_text = f''' 
+        :red[1 out of {st.session_state.df_risks.loc['Laryngeal Cancer','1_out_of_X']}] people with the same risk factor profile as yours would be diagnosed with :red[Laryngeal Cancer] within {st.session_state.years_of_risk} years.
+        '''
+        st.session_state.risk_Laryngeal_text = risk_Laryngeal_text
 
-            st.session_state.df_risks = df_risks
+        risk_OCCandOPC_text = f''' 
+        :red[1 out of {st.session_state.df_risks.loc['OCC and OPC','1_out_of_X']}] people with the same risk factor profile as yours would be diagnosed with :red[Oral Cavity and Oropharyngeal Cancers] within {st.session_state.years_of_risk} years.
+        '''
+        st.session_state.risk_OCCandOPC_text = risk_OCCandOPC_text
 
-
-            risk_OCC_text = f''' 
-            :red[1 out of {st.session_state.df_risks.loc['Oral Cavity Cancer','1_out_of_X']}] people with the same risk factor profile as yours would be diagnosed with :red[Oral Cavity Cancer] within {st.session_state.years_of_risk} years.
-            '''
-            st.session_state.risk_OCC_text = risk_OCC_text
-
-            risk_OPC_text = f''' 
-            :red[1 out of {st.session_state.df_risks.loc['Oropharyngeal Cancer','1_out_of_X']}] people with the same risk factor profile as yours would be diagnosed with :red[Oropharyngeal Cancer] within {st.session_state.years_of_risk} years.
-            '''
-            st.session_state.risk_OPC_text = risk_OPC_text
-
-            risk_HPC_text = f''' 
-            :red[1 out of {st.session_state.df_risks.loc['Hypopharyngeal Cancer','1_out_of_X']}] people with the same risk factor profile as yours would be diagnosed with :red[Hypopharyngeal Cancer] within {st.session_state.years_of_risk} years.
-            '''
-            st.session_state.risk_HPC_text = risk_HPC_text
-
-            risk_Laryngeal_text = f''' 
-            :red[1 out of {st.session_state.df_risks.loc['Laryngeal Cancer','1_out_of_X']}] people with the same risk factor profile as yours would be diagnosed with :red[Laryngeal Cancer] within {st.session_state.years_of_risk} years.
-            '''
-            st.session_state.risk_Laryngeal_text = risk_Laryngeal_text
-
-            risk_OCCandOPC_text = f''' 
-            :red[1 out of {st.session_state.df_risks.loc['OCC and OPC','1_out_of_X']}] people with the same risk factor profile as yours would be diagnosed with :red[Oral Cavity and Oropharyngeal Cancers] within {st.session_state.years_of_risk} years.
-            '''
-            st.session_state.risk_OCCandOPC_text = risk_OCCandOPC_text
-
-            risk_HNC_text = f''' 
-            :red[1 out of {st.session_state.df_risks.loc['Head and Neck Cancer','1_out_of_X']}] people with the same risk factor profile as yours would be diagnosed with :red[Head and Neck Cancer] within {st.session_state.years_of_risk} years.
-            '''
-            st.session_state.risk_HNC_text = risk_HNC_text
+        risk_HNC_text = f''' 
+        :red[1 out of {st.session_state.df_risks.loc['Head and Neck Cancer','1_out_of_X']}] people with the same risk factor profile as yours would be diagnosed with :red[Head and Neck Cancer] within {st.session_state.years_of_risk} years.
+        '''
+        st.session_state.risk_HNC_text = risk_HNC_text
 
 
-            # risk_OCC_text = f''' 
-            # 1. Your quantitative risk for :red[Oral Cavity Cancer] is :blue[1 out of {st.session_state.df_risks.loc['Oral Cavity Cancer','1_out_of_X']} people].
-            # '''
-            # st.session_state.risk_OCC_text = risk_OCC_text
+        # risk_OCC_text = f''' 
+        # 1. Your quantitative risk for :red[Oral Cavity Cancer] is :blue[1 out of {st.session_state.df_risks.loc['Oral Cavity Cancer','1_out_of_X']} people].
+        # '''
+        # st.session_state.risk_OCC_text = risk_OCC_text
 
-            # risk_OPC_text = f''' 
-            # 2. Your quantitative risk for :red[Oropharyngeal Cancer] is :blue[1 out of {st.session_state.df_risks.loc['Oropharyngeal Cancer','1_out_of_X']} people].
-            # '''
-            # st.session_state.risk_OPC_text = risk_OPC_text
+        # risk_OPC_text = f''' 
+        # 2. Your quantitative risk for :red[Oropharyngeal Cancer] is :blue[1 out of {st.session_state.df_risks.loc['Oropharyngeal Cancer','1_out_of_X']} people].
+        # '''
+        # st.session_state.risk_OPC_text = risk_OPC_text
 
-            # risk_HPC_text = f''' 
-            # 3. Your quantitative risk for :red[Hypopharyngeal Cancer] is :blue[1 out of {st.session_state.df_risks.loc['Hypopharyngeal Cancer','1_out_of_X']} people].
-            # '''
-            # st.session_state.risk_HPC_text = risk_HPC_text
+        # risk_HPC_text = f''' 
+        # 3. Your quantitative risk for :red[Hypopharyngeal Cancer] is :blue[1 out of {st.session_state.df_risks.loc['Hypopharyngeal Cancer','1_out_of_X']} people].
+        # '''
+        # st.session_state.risk_HPC_text = risk_HPC_text
 
-            # risk_Laryngeal_text = f''' 
-            # 4. Your quantitative risk for :red[Laryngeal Cancer] is :blue[1 out of {st.session_state.df_risks.loc['Laryngeal Cancer','1_out_of_X']} people].
-            # '''
-            # st.session_state.risk_Laryngeal_text = risk_Laryngeal_text
+        # risk_Laryngeal_text = f''' 
+        # 4. Your quantitative risk for :red[Laryngeal Cancer] is :blue[1 out of {st.session_state.df_risks.loc['Laryngeal Cancer','1_out_of_X']} people].
+        # '''
+        # st.session_state.risk_Laryngeal_text = risk_Laryngeal_text
 
-            # risk_OCCandOPC_text = f''' 
-            # 5. Your quantitative risk for :red[Oral Cavity and Oropharyngeal Cancers] is :blue[1 out of {st.session_state.df_risks.loc['OCC and OPC','1_out_of_X']} people].
-            # '''
-            # st.session_state.risk_OCCandOPC_text = risk_OCCandOPC_text
+        # risk_OCCandOPC_text = f''' 
+        # 5. Your quantitative risk for :red[Oral Cavity and Oropharyngeal Cancers] is :blue[1 out of {st.session_state.df_risks.loc['OCC and OPC','1_out_of_X']} people].
+        # '''
+        # st.session_state.risk_OCCandOPC_text = risk_OCCandOPC_text
 
-            # risk_HNC_text = f''' 
-            # 6. Your quantitative risk for :red[Head and Neck Cancer] is :blue[1 out of {st.session_state.df_risks.loc['Head and Neck Cancer','1_out_of_X']} people].
-            # '''
-            # st.session_state.risk_HNC_text = risk_HNC_text
+        # risk_HNC_text = f''' 
+        # 6. Your quantitative risk for :red[Head and Neck Cancer] is :blue[1 out of {st.session_state.df_risks.loc['Head and Neck Cancer','1_out_of_X']} people].
+        # '''
+        # st.session_state.risk_HNC_text = risk_HNC_text
 
-            st.subheader(f'{st.session_state.risk_OCC_text}')
-            st.subheader(f'{st.session_state.risk_OPC_text}')
-            st.subheader(f'{st.session_state.risk_HPC_text}')
-            st.subheader(f'{st.session_state.risk_Laryngeal_text}')
-            st.subheader(f'{st.session_state.risk_OCCandOPC_text}')
-            st.subheader(f'{st.session_state.risk_HNC_text}')
-
+        st.subheader(f'{st.session_state.risk_OCC_text}')
+        st.subheader(f'{st.session_state.risk_OPC_text}')
+        st.subheader(f'{st.session_state.risk_HPC_text}')
+        st.subheader(f'{st.session_state.risk_Laryngeal_text}')
+        st.subheader(f'{st.session_state.risk_OCCandOPC_text}')
+        st.subheader(f'{st.session_state.risk_HNC_text}')
 
         ###st.subheader(':blue[Once you obtain the CancerDetect saliva test, we can provide you with a more accurate personal risk assessment.]')
 
