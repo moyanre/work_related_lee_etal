@@ -1,7 +1,4 @@
 
-
-
-
 ## https://blog.devgenius.io/creating-an-interactive-website-with-streamlit-in-python-95-100-days-of-python-6de2868f916c
 
 import streamlit as st
@@ -360,7 +357,7 @@ alcohol_status = dico_alcohol[alcohol_status]
 cigarette_freq_label = '''**How many cigarettes do you smoke per day?**'''
 tooltip_cigarette_freq = '''TBD
 '''
-cigarette_freq = st.selectbox(label = cigarette_freq_label, 
+cigarette_freq_raw = st.selectbox(label = cigarette_freq_label, 
                               options = [
                                          '-- Select an option --',
                                          'Never',
@@ -387,7 +384,7 @@ dico_cigarette_freq = {
                     'More than 20 cigarettes per day': '>20 cigarettes/day'
                     }
 
-cigarette_freq = dico_cigarette_freq[cigarette_freq]
+cigarette_freq = dico_cigarette_freq[cigarette_freq_raw]
 
 ###################################################################################
 ###################################################################################
@@ -395,7 +392,7 @@ cigarette_duration_label = '''**How long have you been smoking cigarette?**'''
 
 tooltip_cigarette_duration = ''' TBD
 '''
-cigarette_duration = st.selectbox(label = cigarette_duration_label, 
+cigarette_duration_raw = st.selectbox(label = cigarette_duration_label, 
                               options = [
                                          '-- Select an option --',
                                          'Never',
@@ -422,7 +419,7 @@ dico_cigarette_duration = {
                            'More than 20 years': '>20 years'
                     }
 
-cigarette_duration = dico_cigarette_duration[cigarette_duration]
+cigarette_duration = dico_cigarette_duration[cigarette_duration_raw]
 ################################################################################################################################
 
 
@@ -521,6 +518,11 @@ if(st.button(button_label, on_click=set_stage, args=(1,))):
     st.session_state.hnc_family_history = hnc_family_history
     st.session_state.age = age
 
+    st.session_state.cigarette_freq_raw = cigarette_freq_raw
+    st.session_state.cigarette_duration_raw = cigarette_duration_raw
+
+    
+
 
     if st.session_state.years_of_risk != '-- Select an option --' and st.session_state.alcohol_status != '-- Select an option --' \
           and st.session_state.cigarette_freq != '-- Select an option --' and st.session_state.cigarette_duration != '-- Select an option --' \
@@ -538,8 +540,9 @@ if(st.button(button_label, on_click=set_stage, args=(1,))):
 
         if (st.session_state.cigarette_freq == 'never' and st.session_state.cigarette_duration != 'never') or \
             (st.session_state.cigarette_freq != 'never' and st.session_state.cigarette_duration == 'never'):
-            mssg1 = f'In the question :blue[{cigarette_freq_label}], you answered :blue[**{st.session_state.cigarette_freq}**]'
-            mssg2 = f'In the question :blue[{cigarette_duration_label}], you answered :blue[**{st.session_state.cigarette_duration}**]'
+
+            mssg1 = f'In the question :blue[{cigarette_freq_label}], you answered :blue[**{st.session_state.cigarette_freq_raw}**]'
+            mssg2 = f'In the question :blue[{cigarette_duration_label}], you answered :blue[**{st.session_state.cigarette_duration_raw}**]'
             mssg3 = 'Please fix the contradiction to proceed!'
             st.write(f'{mssg1}')
             st.write(f'{mssg2}')
